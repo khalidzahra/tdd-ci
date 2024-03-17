@@ -37,7 +37,10 @@ public class MyStringTest {
                 new IndexOfStringCase(null, null, 10, -1),
                 new IndexOfStringCase("", "", 10, -1),
                 new IndexOfStringCase("aabb", "ab", 10, -1),
-                new IndexOfStringCase("aabb", "ab", -1, -1)
+                new IndexOfStringCase("aabb", "ab", -1, -1),
+                new IndexOfStringCase("aabb", "ab", 0, 1),
+                new IndexOfStringCase("hihellowelcome", "lowel", 5, 5),
+                new IndexOfStringCase("himynameiskhalid", "meiskha", 3, 6)
         );
         cases.forEach(testCase -> assertEquals(testCase.expected, myString.indexOfString(testCase.s1, testCase.s2, testCase.pos)));
     }
