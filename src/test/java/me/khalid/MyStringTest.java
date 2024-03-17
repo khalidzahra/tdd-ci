@@ -42,7 +42,10 @@ public class MyStringTest {
                 new IndexOfStringCase("hihellowelcome", "lowel", 5, 5),
                 new IndexOfStringCase("himynameiskhalid", "meiskha", 3, 6),
                 new IndexOfStringCase("himynameiskhalid", "z", 0, -1),
-                new IndexOfStringCase("himynameiskhalid", "khalidz", 0, -1)
+                new IndexOfStringCase("himynameiskhalid", "khalidz", 0, -1),
+                new IndexOfStringCase("himynameiskhalid", "thisstringismuchbiggerthans1", 0, -1),
+                new IndexOfStringCase("himynameiskhalid", "", 0, -1),
+                new IndexOfStringCase("", "thisstringismuchbiggerthans1", 0, -1)
         );
         cases.forEach(testCase -> assertEquals(testCase.expected, myString.indexOfString(testCase.s1, testCase.s2, testCase.pos)));
     }

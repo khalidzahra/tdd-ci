@@ -18,6 +18,7 @@ public class MyString {
                 i++;
                 continue;
             }
+            // Create a pointer for s1 to check if the substring corresponds with s2
             int currIndex = i;
             while (currIndex < s1.length() && j < s2.length() && s1.charAt(currIndex) == s2.charAt(j)) {
                 currIndex++;
