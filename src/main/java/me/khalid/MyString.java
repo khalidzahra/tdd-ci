@@ -2,6 +2,13 @@ package me.khalid;
 
 public class MyString {
 
+    /**
+     * Finds the position of the first occurrence of s2 in s1 at or after a specified position.
+     * @param s1 String object containing the target string
+     * @param s2 String object contained the string to match
+     * @param pos Integer specifying the position to start at
+     * @return Integer representing the position of s2 in s1 if found. Returns -1 otherwise.
+     */
     public int indexOfString(String s1, String s2, int pos) {
         if (s1 == null || s2 == null || s1.isEmpty() || s2.isEmpty() || pos >= s1.length() || pos < 0) return -1;
         int i = pos; // Start at pos since we only care about substrings at or after pos
