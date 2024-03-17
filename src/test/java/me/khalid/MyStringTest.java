@@ -34,7 +34,8 @@ public class MyStringTest {
     @Test
     public void testIndexOfString() {
         List<IndexOfStringCase> cases = Arrays.asList(
-                new IndexOfStringCase(null, null, 10, -1)
+                new IndexOfStringCase(null, null, 10, -1),
+                new IndexOfStringCase("", "", 10, -1)
         );
         cases.forEach(testCase -> assertEquals(testCase.expected, myString.indexOfString(testCase.s1, testCase.s2, testCase.pos)));
     }
