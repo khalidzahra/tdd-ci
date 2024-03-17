@@ -33,4 +33,8 @@ public class MyString {
         return -1; // Only reached when s2 not in s1, so just return -1 by default.
     }
 
+    public String replace(String s, String s1, String s2) {
+        return "";
+    }
+
 }

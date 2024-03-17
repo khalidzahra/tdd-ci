@@ -10,6 +10,9 @@ import static org.junit.Assert.assertEquals;
 
 public class MyStringTest {
 
+    /**
+     * Data structure used for representing test cases for the indexOfString method
+     */
     class IndexOfStringCase {
         public String s1;
         public String s2;
@@ -20,6 +23,23 @@ public class MyStringTest {
             this.s1 = s1;
             this.s2 = s2;
             this.pos = pos;
+            this.expected = expected;
+        }
+    }
+
+    /**
+     * Data structure used for representing test cases for the replace method
+     */
+    class ReplaceCase {
+        public String s;
+        public String s1;
+        public String s2;
+        public String expected;
+
+        public ReplaceCase(String s, String s1, String s2, String expected) {
+            this.s = s;
+            this.s1 = s1;
+            this.s2 = s2;
             this.expected = expected;
         }
     }
@@ -48,6 +68,17 @@ public class MyStringTest {
                 new IndexOfStringCase("", "thisstringismuchbiggerthans1", 0, -1)
         );
         cases.forEach(testCase -> assertEquals(testCase.expected, myString.indexOfString(testCase.s1, testCase.s2, testCase.pos)));
+    }
+
+    @Test
+    public void testReplace() {
+        List<ReplaceCase> cases = Arrays.asList(
+            new ReplaceCase(null, null, null, null),
+            new ReplaceCase(null, "", "", null),
+            new ReplaceCase("", null, "", null),
+            new ReplaceCase("", "", null, null)
+        );
+        cases.forEach(testCase -> assertEquals(testCase.expected, myString.replace(testCase.s, testCase.s1, testCase.s2)));
     }
 
 }
