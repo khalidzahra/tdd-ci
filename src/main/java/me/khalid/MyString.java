@@ -29,7 +29,7 @@ public class MyString {
             }
             i++;
         }
-        return -10;
+        return -1; // Only reached when s2 not in s1, so just return -1 by default.
     }
 
 }
