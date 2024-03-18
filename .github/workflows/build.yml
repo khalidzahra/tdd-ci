@@ -19,3 +19,5 @@ jobs:
           distribution: 'temurin'
       - name: Clean, Package, and Test
         run: mvn --batch-mode clean package
+      - name: Run mutation tests
+        run: mvn test-compile org.pitest:pitest-maven:mutationCoverage
