@@ -10,6 +10,23 @@
   <name>tdd-ci</name>
   <url>http://maven.apache.org</url>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.15.8</version>
+        <configuration>
+          <targetClasses>
+            <param>me.khalid.MyString</param>
+          </targetClasses>
+          <mutationThreshold>95</mutationThreshold>
+          <coverageThreshold>95</coverageThreshold>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
