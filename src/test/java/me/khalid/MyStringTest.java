@@ -78,7 +78,10 @@ public class MyStringTest {
             new ReplaceCase("", null, "", null),
             new ReplaceCase("", "", null, null),
             new ReplaceCase("string", "", "", "string"),
-            new ReplaceCase("thisisastring", "", "", "thisisastring")
+            new ReplaceCase("thisisastring", "", "", "thisisastring"),
+            new ReplaceCase("thisisastring", "this", "that", "thatisastring"),
+            new ReplaceCase("thisisastring", "is", "aa", "thaaaaastring"),
+            new ReplaceCase("thisisastring", "is", "", "thastring")
         );
         cases.forEach(testCase -> assertEquals(testCase.expected, myString.replace(testCase.s, testCase.s1, testCase.s2)));
     }
