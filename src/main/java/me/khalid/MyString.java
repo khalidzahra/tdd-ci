@@ -37,19 +37,21 @@ public class MyString {
     public String replace(String s, String s1, String s2) {
         if (s == null || s1 == null || s2 == null) return null;
         if (s1.isEmpty()) return s;
-        int lastFound = 0;
-        while ((lastFound = indexOfString(s, s1, lastFound)) > -1) {
-            StringBuilder temp = new StringBuilder();
-            for (int i = 0; i < lastFound; i++) {
-                temp.append(s.charAt(i));
+        int lastFound = indexOfString(s, s1, 0);
+        int currentIndex = 0;
+        StringBuilder finalString = new StringBuilder();
+        while (lastFound > -1) {
+            for (int i = currentIndex; i < lastFound; i++) {
+                finalString.append(s.charAt(i));
             }
-            temp.append(s2);
-            for (int i = lastFound + s1.length(); i < s.length(); i++) {
-                temp.append(s.charAt(i));
-            }
-            s = temp.toString();
+            finalString.append(s2);
+            currentIndex = lastFound + s1.length();
+            lastFound = indexOfString(s, s1, lastFound + 1);
         }
-        return s;
+        for (int i = currentIndex; i < s.length(); i++) {
+            finalString.append(s.charAt(i));
+        }
+        return finalString.toString();
     }
 
 }
