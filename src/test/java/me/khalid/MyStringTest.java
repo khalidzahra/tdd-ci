@@ -1,14 +1,19 @@
 package me.khalid;
 
+import net.jqwik.api.ForAll;
+import net.jqwik.api.Property;
+import net.jqwik.api.constraints.AlphaChars;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -115,11 +120,11 @@ public class MyStringTest {
                 .thenReturn(0);
         // Handle other values of pos
         Mockito.when(myStringMocked.indexOfString(eq("thisisastring"), eq("this"), not(eq(0))))
-                        .thenReturn(-1);
+                .thenReturn(-1);
         assertEquals("thatisastring", myString.replace("thisisastring", "this", "that", myStringMocked));
 
         // Handle both cases where a match is found
-        Mockito.when(myStringMocked.indexOfString(eq("thisisastring"),  eq("is"), leq(2)))
+        Mockito.when(myStringMocked.indexOfString(eq("thisisastring"), eq("is"), leq(2)))
                 .thenReturn(2);
         Mockito.when(myStringMocked.indexOfString(eq("thisisastring"), eq("is"), and(geq(3), leq(4))))
                 .thenReturn(4);
@@ -128,5 +133,64 @@ public class MyStringTest {
                 .thenReturn(-1);
         assertEquals("thaaaaastring", myString.replace("thisisastring", "is", "aa", myStringMocked));
     }
+
+    /*
+
+      indexOfString Property-based testing
+
+     */
+
+    @Property
+    public void indexOfStringReturnIndexWithinLength(@ForAll String s, @ForAll String s1) {
+        MyString myStringProperty = new MyString(); // Property tests cannot access objects in BeforeClass for some reason
+        int index = myStringProperty.indexOfString(s, s1, 0);
+        if (index != -1) {
+            assertTrue(index >= 0 && index < s.length());
+        }
+    }
+
+    @Property
+    public void indexOfStringCorrectlyFound(@ForAll String s, @ForAll String s1) {
+        MyString myStringProperty = new MyString(); // Property tests cannot access objects in BeforeClass for some reason
+        int index = myStringProperty.indexOfString(s, s1, 0);
+        if (index != -1) {
+            boolean match = true;
+            int s1Index = 0;
+            for (int i = index; i < index + s1.length(); i++, s1Index++) {
+                if (s.charAt(i) != s1.charAt(s1Index)) {
+                    match = false;
+                    break;
+                }
+            }
+            assertTrue(match);
+        }
+    }
+
+    @Property
+    public void indexOfStringNotFound(@ForAll String s, @ForAll String s1) {
+        MyString myStringProperty = new MyString(); // Property tests cannot access objects in BeforeClass for some reason
+        int index = myStringProperty.indexOfString(s, s1, 0);
+        if (!s.contains(s1)) {
+            assertEquals(-1, index);
+        }
+    }
+
+    /*
+
+        replace Property-based testing
+
+     */
+
+    @Property
+    void testReplaceReplacesAllOcurrences(@ForAll String s, @ForAll String s1, @ForAll String s2) {
+        assumeFalse(s1.equals(s2)); // Make sure s2 is not the same as s1
+        assumeFalse(s1.isEmpty()); // Make sure s1 is not empty
+
+        MyString myStringProperty = new MyString(); // Property tests cannot access objects in BeforeClass for some reason
+        // Some random strings were being regarded as regex by the replaceAll function
+        String sanitizedS1 = Pattern.compile(".*\\Q" + s1 + "\\E.*").pattern();
+        assertEquals(s.replaceAll(sanitizedS1, s2), myStringProperty.replace(s, s1, s2, myStringProperty));
+    }
+
 
 }
