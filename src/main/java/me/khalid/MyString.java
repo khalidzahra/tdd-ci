@@ -40,13 +40,14 @@ public class MyString {
      * @param s String object containing target string.
      * @param s1 String object containing string to be replaced.
      * @param s2 String object containing string to replace s1.
+     * @param myString MyString object to be used to access the indexOfString method.
      * @return Returns the string after replacements are made. Returns original s if s1 is empty,
      *         or null if any of the strings are null.
      */
-    public String replace(String s, String s1, String s2) {
+    public String replace(String s, String s1, String s2, MyString myString) {
         if (s == null || s1 == null || s2 == null) return null;
         if (s1.isEmpty()) return s;
-        int lastFound = indexOfString(s, s1, 0); // Contains the last index identified where s1 was found in s
+        int lastFound = myString.indexOfString(s, s1, 0); // Contains the last index identified where s1 was found in s
         int currentIndex = 0;
         StringBuilder finalString = new StringBuilder();
         // Keep looping as long as s1 is found in s
@@ -57,7 +58,7 @@ public class MyString {
             }
             finalString.append(s2);
             currentIndex = lastFound + s1.length(); // Next time start adding from after the current s1 instance
-            lastFound = indexOfString(s, s1, lastFound + 1);
+            lastFound = myString.indexOfString(s, s1, lastFound + 1);
         }
         // Add the rest of s into the final string
         for (int i = currentIndex; i < s.length(); i++) {

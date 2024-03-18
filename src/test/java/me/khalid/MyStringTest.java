@@ -2,11 +2,15 @@ package me.khalid;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.AdditionalMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
 
 public class MyStringTest {
 
@@ -73,19 +77,56 @@ public class MyStringTest {
     @Test
     public void testReplace() {
         List<ReplaceCase> cases = Arrays.asList(
-            new ReplaceCase(null, null, null, null),
-            new ReplaceCase(null, "", "", null),
-            new ReplaceCase("", null, "", null),
-            new ReplaceCase("", "", null, null),
-            new ReplaceCase("string", "", "", "string"),
-            new ReplaceCase("thisisastring", "", "", "thisisastring"),
-            new ReplaceCase("thisisastring", "this", "that", "thatisastring"),
-            new ReplaceCase("thisisastring", "is", "aa", "thaaaaastring"),
-            new ReplaceCase("thisisastring", "is", "", "thastring"),
-            new ReplaceCase("thisisastring", "is", "thisisaprettylargestring", "ththisisaprettylargestringthisisaprettylargestringastring"),
-            new ReplaceCase("thisisastring", "notfound", "thisisaprettylargestring", "thisisastring")
+                new ReplaceCase(null, null, null, null),
+                new ReplaceCase(null, "", "", null),
+                new ReplaceCase("", null, "", null),
+                new ReplaceCase("", "", null, null),
+                new ReplaceCase("string", "", "", "string"),
+                new ReplaceCase("thisisastring", "", "", "thisisastring"),
+                new ReplaceCase("thisisastring", "this", "that", "thatisastring"),
+                new ReplaceCase("thisisastring", "is", "aa", "thaaaaastring"),
+                new ReplaceCase("thisisastring", "is", "", "thastring"),
+                new ReplaceCase("thisisastring", "is", "thisisaprettylargestring", "ththisisaprettylargestringthisisaprettylargestringastring"),
+                new ReplaceCase("thisisastring", "notfound", "thisisaprettylargestring", "thisisastring")
         );
-        cases.forEach(testCase -> assertEquals(testCase.expected, myString.replace(testCase.s, testCase.s1, testCase.s2)));
+
+        cases.forEach(testCase -> assertEquals(testCase.expected, myString.replace(testCase.s, testCase.s1, testCase.s2, myString)));
+    }
+
+    @Test
+    public void testReplaceMocked() {
+        List<ReplaceCase> cases = Arrays.asList(
+                new ReplaceCase(null, null, null, null),
+                new ReplaceCase(null, "", "", null),
+                new ReplaceCase("", null, "", null),
+                new ReplaceCase("", "", null, null),
+                new ReplaceCase("string", "", "", "string"),
+                new ReplaceCase("thisisastring", "", "", "thisisastring"),
+                new ReplaceCase("thisisastring", "is", "aa", "thaaaaastring"),
+                new ReplaceCase("thisisastring", "is", "", "thastring"),
+                new ReplaceCase("thisisastring", "is", "thisisaprettylargestring", "ththisisaprettylargestringthisisaprettylargestringastring"),
+                new ReplaceCase("thisisastring", "notfound", "thisisaprettylargestring", "thisisastring")
+        );
+
+        MyString myStringMocked = Mockito.mock(MyString.class);
+
+        // Handle the only time a match is found
+        Mockito.when(myStringMocked.indexOfString("thisisastring", "this", 0))
+                .thenReturn(0);
+        // Handle other values of pos
+        Mockito.when(myStringMocked.indexOfString(eq("thisisastring"), eq("this"), not(eq(0))))
+                        .thenReturn(-1);
+        assertEquals("thatisastring", myString.replace("thisisastring", "this", "that", myStringMocked));
+
+        // Handle both cases where a match is found
+        Mockito.when(myStringMocked.indexOfString(eq("thisisastring"),  eq("is"), leq(2)))
+                .thenReturn(2);
+        Mockito.when(myStringMocked.indexOfString(eq("thisisastring"), eq("is"), and(geq(3), leq(4))))
+                .thenReturn(4);
+        // Handle other values of pos
+        Mockito.when(myStringMocked.indexOfString(eq("thisisastring"), eq("is"), geq(5)))
+                .thenReturn(-1);
+        assertEquals("thaaaaastring", myString.replace("thisisastring", "is", "aa", myStringMocked));
     }
 
 }
